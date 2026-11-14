@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UjRide - لوحة تحكم السائق</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside>
+            <div class="logo-title">UjRide</div>
+            <div class="system-subtitle">منصة النقل الجامعي الذكي - جامعة جدة</div>
+
+            <div class="menu-section-label">بوابة الطالبة</div>
+            <a href="index.html" class="menu-item"><i class="fa-solid fa-table-cells-large"></i> الصفحة الرئيسية</a>
+            <a href="request.html" class="menu-item"><i class="fa-regular fa-calendar-check"></i> حجز رحلة</a>
+            <a href="trips.html" class="menu-item"><i class="fa-solid fa-bus"></i> رحلاتي</a>
+            <a href="tracking.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> التتبع المباشر</a>
+            <a href="profile.html" class="menu-item"><i class="fa-regular fa-user"></i> تسجيل بيانات الطالب</a>
+
+            <div class="menu-section-label">بوابة السائق والمشرف</div>
+            <a href="drivers.html" class="menu-item active"><i class="fa-solid fa-id-card"></i> لوحة السائق وتأكيد الصعود</a>
+            <a href="supervisor.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> لوحة المشرف والأسطول</a>
+            <a href="login.html" class="menu-item"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</a>
+        </aside>
+
+        <main>
+            <header>
+                <div class="search-box">
+                    <i class="fa-solid fa-bars" style="color: var(--primary-dark); font-size: 20px;"></i>
+                    <input type="text" class="search-input" placeholder="البحث بالاسم أو الرقم الجامعي...">
+                </div>
+                <div class="user-info">
+                    <i class="fa-regular fa-bell" style="font-size: 18px;"></i>
+                    <span>الكابتن: أحمد القحطاني (حافلة BUS-201)</span>
+                    <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div style="background-color: var(--primary-soft); padding: 25px; border-radius: 14px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2 style="color:var(--primary-dark);">صباح الخير، أحمد 👋</h2>
+                        <p style="color:var(--text-muted); font-weight:600;">رحلة اليوم: الصفا / الفيصلية &larr; جامعة جدة (حرم الفيصلية)</p>
+                    </div>
+                    <div style="background:white; padding:12px 22px; border-radius:12px; text-align:center;">
+                        <small style="color:var(--text-muted);">حافلتك اليوم</small>
+                        <div style="font-size:20px; font-weight:800; color:var(--primary-dark);">BUS-201</div>
+                    </div>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card"><div><small>إجمالي الطالبات</small><h2 id="totalSt">8</h2></div><i class="fa-solid fa-users" style="font-size:26px; color:var(--primary-dark);"></i></div>
+                    <div class="kpi-card soft-green"><div><small>تم الركوب</small><h2 id="boardedSt">4</h2></div><i class="fa-solid fa-user-check" style="font-size:26px; color:var(--success-green);"></i></div>
+                    <div class="kpi-card soft-purple"><div><small>بانتظار الصعود</small><h2 id="waitingSt">4</h2></div><i class="fa-solid fa-hourglass-half" style="font-size:26px; color:var(--primary-active);"></i></div>
+                    <div class="kpi-card"><div><small>وقت الوصول المتوقع</small><h2>07:15 ص</h2></div><i class="fa-regular fa-clock" style="font-size:26px; color:var(--primary-dark);"></i></div>
+                </div>
+
+                <div class="card">
+                    <div style="font-weight:800; color:var(--primary-dark); margin-bottom:15px;">تأكيد صعود الطالبات - قائمة الركاب والمحطات</div>
+                    <table class="noor-table">
+                        <thead>
+                            <tr>
+                                <th>اسم الطالبة</th>
+                                <th>الرقم الجامعي</th>
+                                <th>موقع الصعود</th>
+                                <th>حالة الركوب</th>
+                                <th>إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="driverStudentsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+        function renderDriverTable() {
+            const tbody = document.getElementById('driverStudentsTable');
+            tbody.innerHTML = '';
+            let boardedCount = 0;
+            UJRIDE_DATA.students.forEach((st, idx) => {
+                if (st.boarded) boardedCount++;
+                const badge = st.boarded
+                    ? '<span class="badge-status status-active">تم الركوب</span>'
+                    : '<span class="badge-status status-full">بانتظار الصعود</span>';
+                const btnText = st.boarded ? 'إلغاء التأكيد' : 'تأكيد الركوب';
+                const btnBg = st.boarded ? '#7a6b8a' : '#3b1361';
+                tbody.innerHTML += `<tr>
+                    <td><strong>${st.name}</strong></td>
+                    <td>${st.id}</td>
+                    <td>${st.stop}</td>
+                    <td>${badge}</td>
+                    <td><button onclick="toggleBoarding(${idx})" style="background:${btnBg}; color:white; border:none; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:700;">${btnText}</button></td>
+                </tr>`;
+            });
+            document.getElementById('totalSt').textContent = UJRIDE_DATA.students.length;
+            document.getElementById('boardedSt').textContent = boardedCount;
+            document.getElementById('waitingSt').textContent = UJRIDE_DATA.students.length - boardedCount;
+        }
+        function toggleBoarding(index) {
+            UJRIDE_DATA.students[index].boarded = !UJRIDE_DATA.students[index].boarded;
+            renderDriverTable();
+        }
+        renderDriverTable();
+    </script>
+</body>
+</html>

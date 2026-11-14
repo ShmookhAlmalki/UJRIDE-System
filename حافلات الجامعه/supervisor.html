@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UjRide - لوحة تحكم المشرف وإدارة الأسطول</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside>
+            <div class="logo-title">UjRide</div>
+            <div class="system-subtitle">منصة النقل الجامعي الذكي - جامعة جدة</div>
+
+            <div class="menu-section-label">بوابة الطالبة</div>
+            <a href="index.html" class="menu-item"><i class="fa-solid fa-table-cells-large"></i> الصفحة الرئيسية</a>
+            <a href="request.html" class="menu-item"><i class="fa-regular fa-calendar-check"></i> حجز رحلة</a>
+            <a href="trips.html" class="menu-item"><i class="fa-solid fa-bus"></i> رحلاتي</a>
+            <a href="tracking.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> التتبع المباشر</a>
+            <a href="profile.html" class="menu-item"><i class="fa-regular fa-user"></i> تسجيل بيانات الطالب</a>
+
+            <div class="menu-section-label">بوابة السائق والمشرف</div>
+            <a href="drivers.html" class="menu-item"><i class="fa-solid fa-id-card"></i> لوحة السائق وتأكيد الصعود</a>
+            <a href="supervisor.html" class="menu-item active"><i class="fa-solid fa-chart-line"></i> لوحة المشرف والأسطول</a>
+            <a href="login.html" class="menu-item"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</a>
+        </aside>
+
+        <main>
+            <header>
+                <div class="search-box">
+                    <i class="fa-solid fa-bars" style="color: var(--primary-dark); font-size: 20px;"></i>
+                    <input type="text" class="search-input" placeholder="البحث في المسارات والحافلات...">
+                </div>
+                <div class="user-info">
+                    <i class="fa-regular fa-bell" style="font-size: 18px;"></i>
+                    <span>المشرف: محمد</span>
+                    <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <h1 class="page-title">لوحة تحكم المشرف وإدارة أسطول الحافلات (فرع الفيصلية)</h1>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card"><div><small>إجمالي الطالبات</small><h2>1000</h2></div><i class="fa-solid fa-users" style="font-size:26px; color:var(--primary-dark);"></i></div>
+                    <div class="kpi-card soft-purple"><div><small>المسارات النشطة</small><h2>18 مسار</h2></div><i class="fa-solid fa-route" style="font-size:26px; color:var(--primary-active);"></i></div>
+                    <div class="kpi-card soft-green"><div><small>الحافلات النشطة</small><h2>8 / 10 حافلات</h2></div><i class="fa-solid fa-bus" style="font-size:26px; color:var(--success-green);"></i></div>
+                    <div class="kpi-card"><div><small>متوسط زمن الرحلة</small><h2>25 دقيقة</h2></div><i class="fa-regular fa-clock" style="font-size:26px; color:var(--primary-dark);"></i></div>
+                </div>
+
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <div style="font-weight:800; color:var(--primary-dark); font-size:18px;">بيانات أسطول الحافلات (Bus Fleet Configuration Dataset)</div>
+                        <select id="statusFilter" onchange="filterFleet()" style="padding:8px 14px; border-radius:8px; border:1px solid #d1c4e0;">
+                            <option value="ALL">جميع الحالات</option>
+                            <option value="نشطة">نشطة</option>
+                            <option value="ممتلئة">ممتلئة</option>
+                            <option value="صيانة">صيانة</option>
+                        </select>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="noor-table">
+                            <thead>
+                                <tr>
+                                    <th>bus_id</th>
+                                    <th>operator_company</th>
+                                    <th>license_plate</th>
+                                    <th>bus_model</th>
+                                    <th>assigned_branch</th>
+                                    <th>capacity</th>
+                                    <th>available_seats</th>
+                                    <th>status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fleetTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="font-weight:800; color:var(--primary-dark); font-size:18px; margin-bottom:15px;">إدارة الطالبات والتوزيع الجغرافي (الصفا - المروة - الفيصلية)</div>
+                    <table class="noor-table">
+                        <thead>
+                            <tr>
+                                <th>اسم الطالبة</th>
+                                <th>الرقم الجامعي</th>
+                                <th>حي السكن</th>
+                                <th>المسار</th>
+                                <th>رقم الحافلة</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supStudentsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+        function filterFleet() {
+            const filter = document.getElementById('statusFilter').value;
+            const tbody = document.getElementById('fleetTableBody');
+            tbody.innerHTML = '';
+            UJRIDE_DATA.fleet.forEach(bus => {
+                if (filter !== 'ALL' && bus.status !== filter) return;
+                let cls = 'status-active';
+                if (bus.status === 'ممتلئة') cls = 'status-full';
+                if (bus.status === 'صيانة') cls = 'status-maint';
+                tbody.innerHTML += `<tr>
+                    <td><strong>${bus.bus_id}</strong></td>
+                    <td>${bus.operator_company}</td>
+                    <td dir="ltr" style="text-align:right;">${bus.license_plate}</td>
+                    <td>${bus.bus_model}</td>
+                    <td>${bus.assigned_branch}</td>
+                    <td>${bus.capacity}</td>
+                    <td><strong>${bus.available_seats}</strong></td>
+                    <td><span class="badge-status ${cls}">${bus.status}</span></td>
+                </tr>`;
+            });
+        }
+        filterFleet();
+
+        const stBody = document.getElementById('supStudentsBody');
+        UJRIDE_DATA.students.forEach(s => {
+            stBody.innerHTML += `<tr>
+                <td><strong>${s.name}</strong></td>
+                <td>${s.id}</td>
+                <td>${s.district}</td>
+                <td>${s.route}</td>
+                <td>${s.bus_id}</td>
+                <td><span class="badge-status status-active">${s.status}</span></td>
+            </tr>`;
+        });
+    </script>
+</body>
+</html>

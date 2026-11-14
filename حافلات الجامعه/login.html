@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UjRide - تسجيل الدخول</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .login-wrapper {
+            min-height: 100vh;
+            background: linear-gradient(rgba(59, 19, 97, 0.45), rgba(59, 19, 97, 0.55)),
+                        url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+        .login-box {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            padding: 45px 35px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        .login-box h2 { color: var(--primary-dark); text-align: center; margin-bottom: 25px; font-weight: 800; }
+        .form-control-custom {
+            width: 100%; background-color: var(--input-bg); border: none;
+            padding: 13px 15px; border-radius: 8px; margin-bottom: 18px; outline: none; font-size: 15px;
+        }
+        .brand-box {
+            text-align: center; color: var(--primary-dark);
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(6px);
+            padding: 40px 50px; border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-box">
+            <h2>تسجيل الدخول</h2>
+            <form onsubmit="handleLogin(event)">
+                <label style="font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">نوع الحساب</label>
+                <select id="roleSelect" class="form-control-custom">
+                    <option value="index.html">بوابة الطالبة (جامعة جدة)</option>
+                    <option value="drivers.html">بوابة السائق</option>
+                    <option value="supervisor.html">لوحة مشرف النقل</option>
+                </select>
+
+                <label style="font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">الرقم الجامعي / الوظيفي</label>
+                <input type="text" class="form-control-custom" value="2316427" required>
+
+                <label style="font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">كلمة المرور</label>
+                <input type="password" class="form-control-custom" value="12345678" required>
+
+                <button type="submit" class="btn-purple" style="width:100%;">تسجيل الدخول</button>
+                <a href="profile.html" style="display:block; text-align:center; margin-top:12px; padding:11px; border:1.5px solid #d1c4e0; border-radius:10px; color:var(--primary-dark); text-decoration:none; font-weight:700;">إنشاء حساب جديد</a>
+            </form>
+        </div>
+
+        <div class="brand-box">
+            <i class="fa-solid fa-bus" style="font-size: 65px; margin-bottom: 10px;"></i>
+            <h1 style="font-size: 42px; font-weight: 800;">UjRide</h1>
+            <p style="font-size: 18px; font-weight: 700; margin-top: 5px;">خدمة النقل الجامعي<br>لجامعة جدة - فرع الفيصلية</p>
+        </div>
+    </div>
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            window.location.href = document.getElementById('roleSelect').value;
+        }
+    </script>
+</body>
+</html>

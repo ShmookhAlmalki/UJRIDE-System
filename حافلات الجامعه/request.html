@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UjRide - حجز رحلة</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .booking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .select-styled { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #e0d6eb; background-color: #faf8fc; font-weight: 600; outline: none; }
+        .trip-type-btns { display: flex; gap: 10px; }
+        .type-btn { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; background-color: var(--primary-soft); color: var(--primary-dark); }
+        .type-btn.selected { background-color: var(--primary-dark); color: var(--white); }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside>
+            <div class="logo-title">UjRide</div>
+            <div class="system-subtitle">منصة النقل الجامعي الذكي - جامعة جدة</div>
+
+            <div class="menu-section-label">بوابة الطالبة</div>
+            <a href="index.html" class="menu-item"><i class="fa-solid fa-table-cells-large"></i> الصفحة الرئيسية</a>
+            <a href="request.html" class="menu-item active"><i class="fa-regular fa-calendar-check"></i> حجز رحلة</a>
+            <a href="trips.html" class="menu-item"><i class="fa-solid fa-bus"></i> رحلاتي</a>
+            <a href="tracking.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> التتبع المباشر</a>
+            <a href="profile.html" class="menu-item"><i class="fa-regular fa-user"></i> تسجيل بيانات الطالب</a>
+
+            <div class="menu-section-label">بوابة السائق والمشرف</div>
+            <a href="drivers.html" class="menu-item"><i class="fa-solid fa-id-card"></i> لوحة السائق وتأكيد الصعود</a>
+            <a href="supervisor.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> لوحة المشرف والأسطول</a>
+            <a href="login.html" class="menu-item"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</a>
+        </aside>
+
+        <main>
+            <header>
+                <div class="search-box">
+                    <i class="fa-solid fa-bars" style="color: var(--primary-dark); font-size: 20px;"></i>
+                    <input type="text" class="search-input" placeholder="البحث في المسارات والحافلات...">
+                </div>
+                <div class="user-info">
+                    <i class="fa-regular fa-bell" style="font-size: 18px;"></i>
+                    <span>شموخ المالكي</span>
+                    <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <h1 class="page-title">حجز رحلة</h1>
+                <div class="booking-grid">
+                    <div class="card" style="margin:0;">
+                        <div style="font-weight:800; color:var(--primary-dark); margin-bottom:12px;"><i class="fa-regular fa-calendar"></i> تاريخ الرحلة</div>
+                        <input type="date" id="tripDate" class="select-styled" value="2026-11-14">
+                    </div>
+
+                    <div class="card" style="margin:0;">
+                        <div style="font-weight:800; color:var(--primary-dark); margin-bottom:12px;">نوع الرحلة</div>
+                        <div class="trip-type-btns">
+                            <button type="button" class="type-btn selected" onclick="selectType(this, 'الذهاب إلى الجامعة')"><i class="fa-solid fa-building-columns"></i> الذهاب إلى الجامعة</button>
+                            <button type="button" class="type-btn" onclick="selectType(this, 'العودة إلى المنزل')"><i class="fa-solid fa-house"></i> العودة إلى المنزل</button>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin:0;">
+                        <div style="font-weight:800; color:var(--primary-dark); margin-bottom:12px;"><i class="fa-regular fa-clock"></i> وقت الانطلاق</div>
+                        <select id="tripTime" class="select-styled">
+                            <option>07:00 صباحاً</option>
+                            <option selected>01:00 ظهراً</option>
+                            <option>03:00 عصراً</option>
+                        </select>
+                    </div>
+
+                    <div class="card" style="margin:0;">
+                        <div style="font-weight:800; color:var(--primary-dark); margin-bottom:12px;"><i class="fa-solid fa-location-dot"></i> موقع الركوب (نطاق التغطية GIS)</div>
+                        <select id="pickupZone" class="select-styled">
+                            <option value="حي الصفا">حي الصفا - جدة</option>
+                            <option value="حي الفيصلية">حي الفيصلية - جدة</option>
+                            <option value="حي المروة">حي المروة - جدة</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button" onclick="searchAndAssignBus()" class="btn-purple" style="width:100%;">
+                    <i class="fa-solid fa-magnifying-glass"></i> البحث عن رحلة وتخصيص الحافلة (CVRPTW)
+                </button>
+
+                <div id="resultBox" class="card" style="display:none; margin-top:25px; border: 2px solid var(--primary-active);">
+                    <h3 style="color:var(--primary-dark); margin-bottom:10px;"><i class="fa-solid fa-circle-check" style="color:var(--success-green);"></i> تم العثور على حافلة مطابقة لمسارك!</h3>
+                    <p id="resultDetails" style="font-weight:600; margin-bottom:15px;"></p>
+                    <a href="trips.html" class="btn-purple">تأكيد الحجز والانتقال إلى رحلاتي</a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+        let selectedTripType = "الذهاب إلى الجامعة";
+        function selectType(btn, type) {
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedTripType = type;
+        }
+        function searchAndAssignBus() {
+            const zone = document.getElementById('pickupZone').value;
+            const time = document.getElementById('tripTime').value;
+            const availableBus = UJRIDE_DATA.fleet.find(b => b.status === "نشطة" && b.available_seats > 0);
+            localStorage.setItem('bookedTrip', JSON.stringify({
+                bus_id: availableBus.bus_id,
+                operator: availableBus.operator_company,
+                model: availableBus.bus_model,
+                plate: availableBus.license_plate,
+                driver: availableBus.driver,
+                time: time,
+                zone: zone,
+                type: selectedTripType
+            }));
+            document.getElementById('resultDetails').innerHTML = `الحافلة المخصصة: <strong>${availableBus.bus_id} (${availableBus.bus_model} - ${availableBus.license_plate})</strong> | المشغل: <strong>${availableBus.operator_company}</strong> | السائق: <strong>${availableBus.driver}</strong> | المقاعد المتبقية: <strong>${availableBus.available_seats}</strong>`;
+            document.getElementById('resultBox').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UjRide - تسجيل بيانات الطالب</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        .reg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; align-items: start; }
+        .field-group { margin-bottom: 18px; }
+        .field-group label { display: block; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+        .field-group input, .field-group select { width: 100%; background-color: var(--input-bg); border: none; padding: 13px 15px; border-radius: 8px; outline: none; }
+        #homeMap { height: 220px; border-radius: 12px; margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside>
+            <div class="logo-title">UjRide</div>
+            <div class="system-subtitle">منصة النقل الجامعي الذكي - جامعة جدة</div>
+
+            <div class="menu-section-label">بوابة الطالبة</div>
+            <a href="index.html" class="menu-item"><i class="fa-solid fa-table-cells-large"></i> الصفحة الرئيسية</a>
+            <a href="request.html" class="menu-item"><i class="fa-regular fa-calendar-check"></i> حجز رحلة</a>
+            <a href="trips.html" class="menu-item"><i class="fa-solid fa-bus"></i> رحلاتي</a>
+            <a href="tracking.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> التتبع المباشر</a>
+            <a href="profile.html" class="menu-item active"><i class="fa-regular fa-user"></i> تسجيل بيانات الطالب</a>
+
+            <div class="menu-section-label">بوابة السائق والمشرف</div>
+            <a href="drivers.html" class="menu-item"><i class="fa-solid fa-id-card"></i> لوحة السائق وتأكيد الصعود</a>
+            <a href="supervisor.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> لوحة المشرف والأسطول</a>
+            <a href="login.html" class="menu-item"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</a>
+        </aside>
+
+        <main>
+            <header>
+                <div class="search-box">
+                    <i class="fa-solid fa-bars" style="color: var(--primary-dark); font-size: 20px;"></i>
+                    <input type="text" class="search-input" placeholder="البحث في المسارات والحافلات...">
+                </div>
+                <div class="user-info">
+                    <i class="fa-regular fa-bell" style="font-size: 18px;"></i>
+                    <span>شموخ المالكي</span>
+                    <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <h1 class="page-title">تسجيل بيانات الطالب</h1>
+                <form action="index.html" class="card reg-grid">
+                    <div>
+                        <div class="field-group"><label>الاسم كامل</label><input type="text" value="شموخ ضيف الله المالكي" required></div>
+                        <div class="field-group"><label>الرقم الجامعي</label><input type="text" value="2316427" required></div>
+                        <div class="field-group"><label>الفرع الجامعي</label><input type="text" value="جامعة جدة - فرع الفيصلية" readonly></div>
+                        <div class="field-group">
+                            <label>منطقة السكن</label>
+                            <select>
+                                <option selected>حي الفيصلية - جدة</option>
+                                <option>حي الصفا - جدة</option>
+                                <option>حي المروة - جدة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-weight:700; color:var(--text-muted);">تحديد موقع السكن على الخريطة</label>
+                        <div id="homeMap"></div>
+                        <label style="display:block; border:2px dashed #b9a6cc; background:#f4effa; border-radius:10px; padding:18px; text-align:center; cursor:pointer; color:var(--primary-dark); font-weight:700; margin-top:15px;">
+                            <i class="fa-solid fa-arrow-up-from-bracket" style="font-size:20px; display:block; margin-bottom:5px;"></i>
+                            <span>رفع الجدول الدراسي (PDF / Excel)</span>
+                            <input type="file" style="display:none;">
+                        </label>
+                        <button type="submit" class="btn-purple" style="margin-top:18px; width:160px;">التالي</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const homeMap = L.map('homeMap').setView([21.5735, 39.1765], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(homeMap);
+        L.marker([21.5735, 39.1765], { draggable: true }).addTo(homeMap);
+    </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UjRide - الصفحة الرئيسية</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside>
+            <div class="logo-title">UjRide</div>
+            <div class="system-subtitle">منصة النقل الجامعي الذكي - جامعة جدة</div>
+
+            <div class="menu-section-label">بوابة الطالبة</div>
+            <a href="index.html" class="menu-item active"><i class="fa-solid fa-table-cells-large"></i> الصفحة الرئيسية</a>
+            <a href="request.html" class="menu-item"><i class="fa-regular fa-calendar-check"></i> حجز رحلة</a>
+            <a href="trips.html" class="menu-item"><i class="fa-solid fa-bus"></i> رحلاتي</a>
+            <a href="tracking.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> التتبع المباشر</a>
+            <a href="profile.html" class="menu-item"><i class="fa-regular fa-user"></i> تسجيل بيانات الطالب</a>
+
+            <div class="menu-section-label">بوابة السائق والمشرف</div>
+            <a href="drivers.html" class="menu-item"><i class="fa-solid fa-id-card"></i> لوحة السائق وتأكيد الصعود</a>
+            <a href="supervisor.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> لوحة المشرف والأسطول</a>
+            <a href="login.html" class="menu-item"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</a>
+        </aside>
+
+        <main>
+            <header>
+                <div class="search-box">
+                    <i class="fa-solid fa-bars" style="color: var(--primary-dark); font-size: 20px;"></i>
+                    <input type="text" class="search-input" placeholder="البحث في المسارات والحافلات...">
+                </div>
+                <div class="user-info">
+                    <i class="fa-regular fa-bell" style="font-size: 18px;"></i>
+                    <span>شموخ المالكي</span>
+                    <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div style="background-color: var(--primary-soft); padding: 28px; border-radius: 14px; margin-bottom: 25px;">
+                    <h2 style="color: var(--primary-dark); font-size: 24px; margin-bottom: 5px;">"Welcome to UJ-Ride!👋</h2>
+                    <p style="color: var(--text-muted); font-weight: 600;">نتمنى لك رحلة آمنة ومريحة إلى جامعة جدة - فرع الفيصلية</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                    <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin:0;">
+                        <div>
+                            <span style="color: var(--text-muted); font-weight: 700;">رحلتك القادمة</span>
+                            <div style="color: var(--primary-active); font-size: 20px; font-weight: 800; margin: 5px 0;">اليوم - 1:00 م</div>
+                            <small style="color: var(--text-muted);">إلى الجامعة (فرع الفيصلية)</small>
+                        </div>
+                        <i class="fa-solid fa-bus" style="font-size: 32px; color: var(--primary-dark);"></i>
+                    </div>
+
+                    <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin:0;">
+                        <div>
+                            <span style="color: var(--text-muted); font-weight: 700;">حالة الرحلة</span>
+                            <div style="color: var(--success-green); font-size: 22px; font-weight: 800; margin-top: 5px;">
+                                <i class="fa-solid fa-square-check"></i> مؤكدة
+                            </div>
+                            <small style="color: var(--text-muted);">الحافلة BUS-201 (شركة مسارات الخير)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="request.html" class="btn-purple" style="width: 100%; margin-bottom: 25px;">حجز رحلة جديدة</a>
+
+                <div class="card">
+                    <div style="font-weight: 800; color: var(--primary-dark); margin-bottom: 15px;">الرحلات المجدولة والمحسوبة خوارزمياً (K-Means + CVRPTW)</div>
+                    <table class="noor-table">
+                        <thead>
+                            <tr>
+                                <th>رقم المسار</th>
+                                <th>حي الانطلاق</th>
+                                <th>الوجهة</th>
+                                <th>رقم الحافلة</th>
+                                <th>الشركة المشغلة</th>
+                                <th>كفاءة المسار</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="homeRoutesTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+        const tbody = document.getElementById('homeRoutesTable');
+        UJRIDE_DATA.routes.forEach(r => {
+            const bus = UJRIDE_DATA.fleet.find(b => b.bus_id === r.bus_id) || { operator_company: "شركة مسارات الخير للنقل" };
+            tbody.innerHTML += `<tr>
+                <td><strong>${r.route_id}</strong></td>
+                <td>${r.origin}</td>
+                <td>${r.destination}</td>
+                <td>${r.bus_id}</td>
+                <td>${bus.operator_company}</td>
+                <td>${r.efficiency}</td>
+                <td><span class="badge-status status-active">${r.status}</span></td>
+            </tr>`;
+        });
+    </script>
+</body>
+</html>
